@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { sql } from "./lib/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/auth", authRoutes);
+
 async function initDb() {
   try {
     await sql`
@@ -25,6 +28,7 @@ async function initDb() {
     email VARCHAR(50) NOT NULL UNIQUE,
     username VARCHAR(25) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
+    profile_pic VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`;
     console.log("Successfully Initialized Database");
