@@ -21,17 +21,22 @@ export const register = async (req, res) => {
       INSERT INTO users (first_name, last_name, email, username, password) 
       VALUES (${first_name}, ${last_name}, ${email}, ${username}, ${hashedPassword}) 
       RETURNING id, first_name, last_name, email, username;`;
-    const token = jwt.sign({ id: user[0].id }, process.env.JWT_SECRET, {
+
+    // Sign JWT with the entire user object
+    const token = jwt.sign({ user: user[0] }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
+
+    // Set the token in the cookie
     res.cookie("token", token, {
-      maxAge: 60 * 60 * 24 * 7 * 1000,
+      maxAge: 60 * 60 * 24 * 7 * 1000, // 7 days
       sameSite: "Strict",
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
+      secure: process.env.NODE_ENV !== "development", // Ensure cookies are sent only on HTTPS in production
     });
+
     console.log("User Registered Successfully");
-    res.status(201).json(user[0]);
+    res.status(201).json(user[0]); // Return the full user object to the client
   } catch (error) {
     console.log("Error in register: ", error.message);
     res.status(500).json({ message: "Internal Server Error" });
@@ -49,17 +54,22 @@ export const login = async (req, res) => {
     const isPasswordValid = await bcryptjs.compare(password, user[0].password);
     if (!isPasswordValid)
       return res.status(401).json({ message: "Invalid Credentials" });
-    const token = jwt.sign({ id: user[0].id }, process.env.JWT_SECRET, {
+
+    // Sign JWT with the entire user object
+    const token = jwt.sign({ user: user[0] }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
+
+    // Set the token in the cookie
     res.cookie("token", token, {
-      maxAge: 60 * 60 * 24 * 7 * 1000,
+      maxAge: 60 * 60 * 24 * 7 * 1000, // 7 days
       sameSite: "Strict",
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
+      secure: process.env.NODE_ENV !== "development", // Ensure cookies are sent only on HTTPS in production
     });
+
     console.log("User Logged In Successfully");
-    res.status(200).json(user[0]);
+    res.status(200).json(user[0]); // Return the full user object to the client
   } catch (error) {
     console.log("Error in login: ", error.message);
     res.status(500).json({ message: "Internal Server Error" });
