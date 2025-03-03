@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { sql } from "./lib/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import recipeRoutes from "./routes/recipeRoutes.js";
+import recipeIngredientRoutes from "./routes/recipeIngredientRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,7 +18,9 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/recipes", recipeRoutes);
+app.use("/api/recipe-ingredients", recipeIngredientRoutes);
 
 async function initDb() {
   try {
@@ -27,10 +31,26 @@ async function initDb() {
     last_name VARCHAR(25) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     username VARCHAR(25) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     profile_pic VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );`;
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;
+    await sql`
+    CREATE TABLE IF NOT EXISTS recipes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(25) NOT NULL,
+    preparation_time VARCHAR(25) NOT NULL,
+    cooking_time VARCHAR(25) NOT NULL,
+    type VARCHAR(25) NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE);`;
+    await sql`
+    CREATE TABLE IF NOT EXISTS recipe_ingredients (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(25) NOT NULL,
+    quantity DECIMAL(10, 2) NOT NULL,
+    unit VARCHAR(25) NOT NULL,
+    recipe_id INT NOT NULL,
+    FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE);`;
     console.log("Successfully Initialized Database");
   } catch (error) {
     console.log("Error in initDb: ", error);
