@@ -12,12 +12,12 @@ const Navbar = () => {
   };
 
   return (
-    <header className="p-4">
+    <header className="container mx-auto py-4">
       <nav className="flex justify-between items-center">
-        <Link to="/" className="font-[Lora] text-2xl">
+        <Link to="/" className="font-[Lora] text-[32px]">
           Wellness
         </Link>
-        <ul className="flex justify-end items-center gap-4 font-[Merriweather]">
+        <ul className="flex justify-end items-center gap-4">
           <li>
             <Link to="/" className="link link-hover">
               Home
@@ -59,7 +59,10 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/register" className="btn bg-[#3C6E71]">
+                <Link
+                  to="/register"
+                  className="btn bg-[var(--teal)] rounded-full"
+                >
                   Join Us!
                 </Link>
               </li>
@@ -69,7 +72,7 @@ const Navbar = () => {
               <li>
                 <Link to="/profile" className="flex items-center">
                   <div className="avatar">
-                    <div className="ring-offset-base-100 w-8 rounded-full ring ring-offset-2 ring-[#284B63]">
+                    <div className="ring-offset-base-100 w-8 rounded-full ring ring-offset-2 ring-[var(--blue)]">
                       <img
                         src={
                           authUser.profile_pic ||
@@ -83,7 +86,10 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <button className="btn bg-[#3C6E71]" onClick={handleLogout}>
+                <button
+                  className="btn bg-[var(--teal)] rounded-full"
+                  onClick={handleLogout}
+                >
                   Logout
                 </button>
               </li>
