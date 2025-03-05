@@ -11,7 +11,7 @@ import { protectRoutes } from "../middleware/protectRoutes.js";
 const router = Router();
 
 router.post("/", protectRoutes, create);
-router.get("/", protectRoutes, read);
+router.get("/", read);
 router.get("/:id", protectRoutes, readById);
 router.put("/:id", protectRoutes, update);
 router.delete("/:id", protectRoutes, deleteById);

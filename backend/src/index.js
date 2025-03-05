@@ -15,7 +15,11 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "50mb",
+  })
+);
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
@@ -38,9 +42,11 @@ async function initDb() {
     CREATE TABLE IF NOT EXISTS recipes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(25) NOT NULL,
+    description VARCHAR(255) NOT NULL,
     preparation_time VARCHAR(25) NOT NULL,
     cooking_time VARCHAR(25) NOT NULL,
     type VARCHAR(25) NOT NULL,
+    image VARCHAR(255) NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE);`;
     await sql`

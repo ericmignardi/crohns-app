@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Recipes from "./pages/Recipes.jsx";
+import Create from "./pages/Create.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Chat from "./pages/Chat.jsx";
@@ -27,6 +28,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/recipes" element={<Recipes />} />
+        <Route path="/create" element={authUser ? <Create /> : <Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/chat" element={authUser ? <Chat /> : <Login />} />

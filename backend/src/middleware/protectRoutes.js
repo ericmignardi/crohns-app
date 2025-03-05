@@ -12,7 +12,7 @@ export const protectRoutes = async (req, res, next) => {
     if (!decoded)
       return res.status(401).json({ message: "Unauthorized: Invalid Token" });
     const user = await sql`
-    SELECT * FROM users WHERE id = ${decoded.id} LIMIT 1;`;
+    SELECT * FROM users WHERE id = ${decoded.user.id} LIMIT 1;`;
     if (user.length === 0) {
       return res.status(404).json({ message: "User Not Found" });
     }

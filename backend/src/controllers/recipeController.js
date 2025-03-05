@@ -1,15 +1,18 @@
 import { sql } from "../lib/db.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const create = async (req, res) => {
-  const { name, cooking_time, preparation_time, type } = req.body;
+  const { name, description, cooking_time, preparation_time, type, image } =
+    req.body;
   const { id } = req.user;
   try {
-    if (!name || !cooking_time || !preparation_time || !type) {
+    if (!name || !cooking_time || !preparation_time || !type || !image) {
       return res.status(400).json({ message: "All Fields Required" });
     }
+    const upload = await cloudinary.uploader.upload(image);
     const recipe = await sql`
-      INSERT INTO recipes (name, cooking_time, preparation_time, type, user_id)
-      VALUES (${name}, ${cooking_time}, ${preparation_time}, ${type}, ${id})
+      INSERT INTO recipes (name, description, cooking_time, preparation_time, type, image, user_id)
+      VALUES (${name}, ${description}, ${cooking_time}, ${preparation_time}, ${type}, ${upload.secure_url}, ${id})
       RETURNING *;
     `;
     if (recipe.length === 0) {
@@ -18,7 +21,7 @@ export const create = async (req, res) => {
     console.log(`Successfully Created Recipe`);
     res.status(201).json(recipe[0]);
   } catch (error) {
-    console.log("Error in create: ", error.message);
+    console.log("Error in create : ", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -31,6 +34,7 @@ export const read = async (req, res) => {
         u.username AS owner_username,
         array_agg(
           jsonb_build_object(
+            'id', ri.id,
             'name', ri.name,
             'quantity', ri.quantity,
             'unit', ri.unit
@@ -38,9 +42,9 @@ export const read = async (req, res) => {
         ) AS ingredients
       FROM 
         recipes AS r
-      INNER JOIN 
+      LEFT JOIN 
         recipe_ingredients AS ri ON r.id = ri.recipe_id
-      INNER JOIN 
+      LEFT JOIN 
         users AS u ON u.id = r.user_id
       GROUP BY 
         r.id, u.username;
@@ -65,6 +69,7 @@ export const readById = async (req, res) => {
         u.username AS owner_username,
         array_agg(
           jsonb_build_object(
+            'id', ri.id,
             'name', ri.name,
             'quantity', ri.quantity,
             'unit', ri.unit
@@ -72,9 +77,9 @@ export const readById = async (req, res) => {
         ) AS ingredients
       FROM 
         recipes AS r
-      INNER JOIN 
+      LEFT JOIN 
         recipe_ingredients AS ri ON r.id = ri.recipe_id
-      INNER JOIN 
+      LEFT JOIN 
         users AS u ON u.id = r.user_id
       WHERE 
         r.id = ${id}
@@ -93,7 +98,7 @@ export const readById = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  const { name, cooking_time, preparation_time, type } = req.body;
+  const { name, description, cooking_time, preparation_time, type } = req.body;
   const { id: recipeId } = req.params;
   const { id } = req.user;
   try {
@@ -107,7 +112,7 @@ export const update = async (req, res) => {
     }
     const updatedRecipe = await sql`
       UPDATE recipes
-      SET name = ${name}, cooking_time = ${cooking_time}, 
+      SET name = ${name}, description = ${description}, cooking_time = ${cooking_time}, 
           preparation_time = ${preparation_time}, type = ${type}
       WHERE id = ${recipeId}
       RETURNING *;
