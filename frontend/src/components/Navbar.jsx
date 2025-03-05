@@ -112,10 +112,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div
-          className="md:hidden absolute top-0 left-0 w-full bg-gray-800 opacity-90 shadow-lg p-4 z-10 flex justify-center items-center"
-          style={{ height: "100vh" }} // Full screen height for mobile menu
-        >
+        <div className="md:hidden absolute top-0 left-0 size-full bg-[var(--blue)] opacity-90 shadow-lg z-10 flex justify-center items-center">
           <ul className="flex flex-col items-center gap-4">
             <li>
               <Link
