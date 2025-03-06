@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import Recipes from "./pages/Recipes.jsx";
 import Create from "./pages/Create.jsx";
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/register" element={authUser ? <Home /> : <Register />} />
         <Route path="/login" element={authUser ? <Home /> : <Login />} />
       </Routes>
+      <Footer />
       <Toaster />
     </>
   );

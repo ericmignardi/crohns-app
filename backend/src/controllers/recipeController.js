@@ -2,8 +2,16 @@ import { sql } from "../lib/db.js";
 import cloudinary from "../lib/cloudinary.js";
 
 export const create = async (req, res) => {
-  const { name, description, cooking_time, preparation_time, type, image } =
-    req.body;
+  const {
+    name,
+    description,
+    cooking_time,
+    preparation_time,
+    type,
+    image,
+    instructions,
+    ingredients,
+  } = req.body;
   const { id } = req.user;
   try {
     if (!name || !cooking_time || !preparation_time || !type || !image) {
@@ -11,17 +19,50 @@ export const create = async (req, res) => {
     }
     const upload = await cloudinary.uploader.upload(image);
     const recipe = await sql`
-      INSERT INTO recipes (name, description, cooking_time, preparation_time, type, image, user_id)
-      VALUES (${name}, ${description}, ${cooking_time}, ${preparation_time}, ${type}, ${upload.secure_url}, ${id})
+      INSERT INTO recipes (name, description, cooking_time, preparation_time, type, image, instructions, user_id)
+      VALUES (${name}, ${description}, ${cooking_time}, ${preparation_time}, ${type}, ${upload.secure_url}, ${instructions}, ${id})
       RETURNING *;
     `;
+    const recipeId = recipe[0].id;
     if (recipe.length === 0) {
       return res.status(400).json({ message: "Error Creating Recipe" });
     }
+
+    for (const ingredient of ingredients) {
+      const { name, quantity, unit } = ingredient;
+      await sql`
+        INSERT INTO recipe_ingredients (name, quantity, unit, recipe_id) 
+        VALUES (${name}, ${quantity}, ${unit}, ${recipeId}) RETURNING *;
+      `;
+    }
+
+    const createdRecipeWithIngredients = await sql`
+      SELECT 
+        r.*, 
+        u.username AS owner_username,
+        array_agg(
+          jsonb_build_object(
+            'id', ri.id,
+            'name', ri.name,
+            'quantity', ri.quantity,
+            'unit', ri.unit
+          )
+        ) AS ingredients
+      FROM 
+        recipes AS r
+      LEFT JOIN 
+        recipe_ingredients AS ri ON r.id = ri.recipe_id
+      LEFT JOIN 
+        users AS u ON u.id = r.user_id
+      WHERE
+        r.id = ${recipeId}
+      GROUP BY 
+        r.id, u.username;
+    `;
     console.log(`Successfully Created Recipe`);
-    res.status(201).json(recipe[0]);
+    res.status(201).json(createdRecipeWithIngredients[0]);
   } catch (error) {
-    console.log("Error in create : ", error.message);
+    console.log("Error in create: ", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -98,7 +139,15 @@ export const readById = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  const { name, description, cooking_time, preparation_time, type } = req.body;
+  const {
+    name,
+    description,
+    cooking_time,
+    preparation_time,
+    type,
+    instructions,
+    ingredients,
+  } = req.body;
   const { id: recipeId } = req.params;
   const { id } = req.user;
   try {
@@ -113,15 +162,60 @@ export const update = async (req, res) => {
     const updatedRecipe = await sql`
       UPDATE recipes
       SET name = ${name}, description = ${description}, cooking_time = ${cooking_time}, 
-          preparation_time = ${preparation_time}, type = ${type}
+          preparation_time = ${preparation_time}, type = ${type}, instructions = ${instructions}
       WHERE id = ${recipeId}
       RETURNING *;
     `;
-    if (updatedRecipe.length === 0) {
+    const updatedRecipeId = updatedRecipe[0].id;
+    for (const ingredient of ingredients) {
+      const { name, quantity, unit } = ingredient;
+      const [recipeIngredient] = await sql`
+        SELECT id FROM recipe_ingredients WHERE recipe_id = ${updatedRecipeId} AND name = ${name} LIMIT 1;
+      `;
+      if (recipeIngredient) {
+        await sql`
+          UPDATE recipe_ingredients
+          SET quantity = ${quantity}, unit = ${unit}
+          WHERE id = ${recipeIngredient.id}
+          RETURNING *;
+        `;
+      } else {
+        await sql`
+          INSERT INTO recipe_ingredients (recipe_id, name, quantity, unit)
+          VALUES (${updatedRecipeId}, ${name}, ${quantity}, ${unit})
+          RETURNING *;
+        `;
+      }
+    }
+
+    const updatedRecipeWithIngredients = await sql`
+      SELECT 
+        r.*, 
+        u.username AS owner_username,
+        array_agg(
+          jsonb_build_object(
+            'id', ri.id,
+            'name', ri.name,
+            'quantity', ri.quantity,
+            'unit', ri.unit
+          )
+        ) AS ingredients
+      FROM 
+        recipes AS r
+      LEFT JOIN 
+        recipe_ingredients AS ri ON r.id = ri.recipe_id
+      LEFT JOIN 
+        users AS u ON u.id = r.user_id
+      WHERE
+        r.id = ${updatedRecipeId}
+      GROUP BY 
+        r.id, u.username;
+    `;
+    if (updatedRecipeWithIngredients.length === 0) {
       return res.status(400).json({ message: "Error Updating Recipe" });
     }
     console.log(`Successfully Updated Recipe: ${updatedRecipe[0].name}`);
-    res.status(200).json(updatedRecipe[0]);
+    res.status(200).json(updatedRecipeWithIngredients[0]);
   } catch (error) {
     console.log("Error in update: ", error.message);
     res.status(500).json({ message: "Internal Server Error" });

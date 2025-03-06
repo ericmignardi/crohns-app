@@ -215,7 +215,7 @@ const Navbar = () => {
                     className="btn bg-[var(--teal)] rounded-full"
                     onClick={() => {
                       handleLogout();
-                      setIsMobileMenuOpen(false); // Close the menu on logout
+                      setIsMobileMenuOpen(false);
                     }}
                   >
                     Logout

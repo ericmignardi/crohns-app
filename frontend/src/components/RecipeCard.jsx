@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore.js";
 import { useRecipeStore } from "../store/useRecipeStore.js";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 const RecipeCard = ({ recipe }) => {
   const { authUser } = useAuthStore();
   const { deleteById, update } = useRecipeStore();
 
-  const [isModalOpen, setIsModalOpen] = useState(null); // Track which modal is open
+  const [isModalOpen, setIsModalOpen] = useState(null);
   const [formData, setFormData] = useState({
     name: recipe.name || "",
     description: recipe.description || "",
@@ -14,6 +15,8 @@ const RecipeCard = ({ recipe }) => {
     cooking_time: recipe.cooking_time || "",
     type: recipe.type || "",
     image: recipe.image || "",
+    instructions: recipe.instructions || "",
+    ingredients: recipe.ingredients || "",
   });
 
   useEffect(() => {
@@ -24,6 +27,8 @@ const RecipeCard = ({ recipe }) => {
       cooking_time: recipe.cooking_time || "",
       type: recipe.type || "",
       image: recipe.image || "",
+      instructions: recipe.instructions || "",
+      ingredients: recipe.ingredients || "",
     });
   }, [recipe]);
 
@@ -46,18 +51,18 @@ const RecipeCard = ({ recipe }) => {
     }));
   };
 
-  // const handleIngredientChange = (index, e) => {
-  //   const { name, value } = e.target;
-  //   const updatedIngredients = [...formData.ingredients];
-  //   updatedIngredients[index] = {
-  //     ...updatedIngredients[index],
-  //     [name]: value,
-  //   };
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     ingredients: updatedIngredients,
-  //   }));
-  // };
+  const handleIngredientChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedIngredients = [...formData.ingredients];
+    updatedIngredients[index] = {
+      ...updatedIngredients[index],
+      [name]: value,
+    };
+    setFormData((prev) => ({
+      ...prev,
+      ingredients: updatedIngredients,
+    }));
+  };
 
   return (
     <div className="card bg-base-100 w-96 shadow-sm h-96">
@@ -76,18 +81,15 @@ const RecipeCard = ({ recipe }) => {
         <div className="card-actions justify-end">
           {authUser.id === recipe.user_id && (
             <button
-              className="btn bg-info text-[var(--dark)]"
+              className="btn bg-blue-500 text-[var(--dark)]"
               onClick={() => setIsModalOpen("update")}
             >
-              Update
+              <FaEdit />
             </button>
           )}
           {authUser.id === recipe.user_id && (
-            <button
-              className="btn bg-error text-[var(--dark)]"
-              onClick={handleDelete}
-            >
-              Delete
+            <button className="btn bg-red-500 text-[var(--dark)]">
+              <FaTrash onClick={handleDelete} />
             </button>
           )}
           <button
@@ -114,7 +116,7 @@ const RecipeCard = ({ recipe }) => {
                 </div>
               </div>
             </div>
-            {/* <h4>Ingredients</h4>
+            <h4>Ingredients</h4>
             <ul>
               {recipe.ingredients.map((ingredient) => (
                 <li key={ingredient.id}>
@@ -123,14 +125,19 @@ const RecipeCard = ({ recipe }) => {
                   </span>
                 </li>
               ))}
-            </ul> */}
-            {/* <h4>Steps</h4>
-            <ul></ul> */}
+            </ul>
+            <h4>Steps</h4>
+            <ul>
+              {recipe.instructions.split("\n").map((instruction, index) => (
+                <li key={index}>
+                  <span className="text-xs text-[var(--gray)]">
+                    {instruction}
+                  </span>
+                </li>
+              ))}
+            </ul>
             <div className="modal-action">
-              <button
-                className="btn"
-                onClick={() => setIsModalOpen(null)} // Close the details modal
-              >
+              <button className="btn" onClick={() => setIsModalOpen(null)}>
                 Close
               </button>
             </div>
@@ -146,7 +153,6 @@ const RecipeCard = ({ recipe }) => {
               onSubmit={handleUpdate}
               className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4"
             >
-              {/* Recipe Name */}
               <label htmlFor="name">Name</label>
               <input
                 className="input"
@@ -157,7 +163,6 @@ const RecipeCard = ({ recipe }) => {
                 value={formData.name}
                 onChange={handleChange}
               />
-
               <label htmlFor="description">Description</label>
               <input
                 className="input"
@@ -168,8 +173,6 @@ const RecipeCard = ({ recipe }) => {
                 value={formData.description}
                 onChange={handleChange}
               />
-
-              {/* Preparation Time */}
               <label htmlFor="preparation_time">Preparation Time</label>
               <input
                 className="input"
@@ -180,8 +183,6 @@ const RecipeCard = ({ recipe }) => {
                 value={formData.preparation_time}
                 onChange={handleChange}
               />
-
-              {/* Cooking Time */}
               <label htmlFor="cooking_time">Cooking Time</label>
               <input
                 className="input"
@@ -192,8 +193,6 @@ const RecipeCard = ({ recipe }) => {
                 value={formData.cooking_time}
                 onChange={handleChange}
               />
-
-              {/* Type */}
               <label htmlFor="type">Type</label>
               <input
                 className="input"
@@ -204,8 +203,6 @@ const RecipeCard = ({ recipe }) => {
                 value={formData.type}
                 onChange={handleChange}
               />
-
-              {/* Image */}
               <label htmlFor="image">Image</label>
               <input
                 className="input"
@@ -216,8 +213,16 @@ const RecipeCard = ({ recipe }) => {
                 value={formData.image}
                 onChange={handleChange}
               />
-
-              {/* Ingredients
+              <label htmlFor="instructions">Instructions</label>
+              <textarea
+                className="input"
+                name="instructions"
+                id="instructions"
+                placeholder="Instructions"
+                value={formData.instructions}
+                onChange={handleChange}
+                rows="4"
+              />
               <h3>Ingredients</h3>
               {formData.ingredients.map((ingredient, index) => (
                 <div key={index} className="flex gap-2">
@@ -225,7 +230,7 @@ const RecipeCard = ({ recipe }) => {
                     className="input input-bordered input-sm w-full"
                     type="text"
                     name="name"
-                    placeholder="Ingredient name"
+                    placeholder="Name"
                     value={ingredient.name}
                     onChange={(e) => handleIngredientChange(index, e)}
                   />
@@ -246,8 +251,7 @@ const RecipeCard = ({ recipe }) => {
                     onChange={(e) => handleIngredientChange(index, e)}
                   />
                 </div>
-              ))} */}
-
+              ))}
               <button
                 type="submit"
                 className="btn bg-[var(--teal)] rounded-full"

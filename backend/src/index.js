@@ -47,6 +47,7 @@ async function initDb() {
     cooking_time VARCHAR(25) NOT NULL,
     type VARCHAR(25) NOT NULL,
     image VARCHAR(255) NOT NULL,
+    instructions TEXT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE);`;
     await sql`

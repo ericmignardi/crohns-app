@@ -5,8 +5,8 @@ const Home = () => {
   return (
     <main className="container mx-auto py-4">
       <section>
-        <div className="grid grid-cols-2 justify-center items-center">
-          <div className="flex flex-col justify-center items-start gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-4 text-center md:text-left">
+          <div className="flex flex-col justify-center items-center md:items-start gap-4">
             <h1 className="text-6xl">Better Your Health</h1>
             <p className="text-3xl text-[var(--gray)]">
               Tailored recipes and real-time chat to promote discussion.
