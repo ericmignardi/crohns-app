@@ -5,8 +5,9 @@ import { sql } from "./lib/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import recipeRoutes from "./routes/recipeRoutes.js";
 import recipeIngredientRoutes from "./routes/recipeIngredientRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import { app, server } from "./lib/socket.js";
 
-const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/recipe-ingredients", recipeIngredientRoutes);
+app.use("/api/messages", messageRoutes);
 
 async function initDb() {
   try {
@@ -58,6 +60,15 @@ async function initDb() {
     unit VARCHAR(25) NOT NULL,
     recipe_id INT NOT NULL,
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE);`;
+    await sql`
+    CREATE TABLE IF NOT EXISTS messages (
+    id SERIAL PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE);`;
     console.log("Successfully Initialized Database");
   } catch (error) {
     console.log("Error in initDb: ", error);
@@ -65,7 +76,7 @@ async function initDb() {
 }
 
 initDb().then(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
   });
 });

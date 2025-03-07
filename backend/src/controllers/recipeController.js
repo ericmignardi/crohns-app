@@ -35,7 +35,6 @@ export const create = async (req, res) => {
         VALUES (${name}, ${quantity}, ${unit}, ${recipeId}) RETURNING *;
       `;
     }
-
     const createdRecipeWithIngredients = await sql`
       SELECT 
         r.*, 

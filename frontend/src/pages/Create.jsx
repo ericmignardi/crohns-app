@@ -89,7 +89,7 @@ const Create = () => {
   };
 
   return (
-    <main className="container mx-auto py-4">
+    <main className="container mx-auto p-4">
       <section>
         <h1>Create</h1>
         <form
@@ -106,7 +106,6 @@ const Create = () => {
             value={formData.name}
             onChange={handleChange}
           />
-
           <label htmlFor="description">Description</label>
           <input
             className="input"
@@ -117,7 +116,6 @@ const Create = () => {
             value={formData.description}
             onChange={handleChange}
           />
-
           <label htmlFor="preparation_time">Preparation Time</label>
           <input
             className="input"
@@ -128,7 +126,6 @@ const Create = () => {
             value={formData.preparation_time}
             onChange={handleChange}
           />
-
           <label htmlFor="cooking_time">Cooking Time</label>
           <input
             className="input"
@@ -139,7 +136,6 @@ const Create = () => {
             value={formData.cooking_time}
             onChange={handleChange}
           />
-
           <label htmlFor="type">Type</label>
           <input
             className="input"
@@ -150,7 +146,6 @@ const Create = () => {
             value={formData.type}
             onChange={handleChange}
           />
-
           <label htmlFor="image">Image</label>
           <input
             className="input"
@@ -161,7 +156,6 @@ const Create = () => {
             value={formData.image}
             onChange={handleChange}
           />
-
           <label htmlFor="instructions">Instructions</label>
           <textarea
             className="input"
@@ -172,7 +166,6 @@ const Create = () => {
             onChange={handleChange}
             rows="4"
           />
-
           <h3>Ingredients</h3>
           {formData.ingredients.map((ingredient, index) => (
             <div key={index} className="flex gap-2">
@@ -211,7 +204,6 @@ const Create = () => {
               )}
             </div>
           ))}
-
           <button
             type="button"
             onClick={handleAddIngredient}
@@ -219,7 +211,6 @@ const Create = () => {
           >
             Add Ingredient
           </button>
-
           <button type="submit" className="btn bg-[var(--teal)] rounded-full">
             Submit
           </button>

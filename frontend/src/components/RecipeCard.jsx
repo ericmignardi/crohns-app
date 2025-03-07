@@ -75,7 +75,7 @@ const RecipeCard = ({ recipe }) => {
           alt="Shoes"
         />
       </figure>
-      <div className="card-body">
+      <div className="card-body bg-[var(--blue)]">
         <h2 className="card-title">{recipe.name}</h2>
         <p>{recipe.description}</p>
         <div className="card-actions justify-end">
@@ -148,7 +148,7 @@ const RecipeCard = ({ recipe }) => {
       {/* Update Recipe Modal */}
       {isModalOpen === "update" && (
         <dialog id="my_modal_2" className="modal modal-open">
-          <div className="modal-box bg-[var(--dark)]">
+          <div className="modal-box bg-base-200">
             <form
               onSubmit={handleUpdate}
               className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4"

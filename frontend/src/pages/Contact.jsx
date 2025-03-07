@@ -37,7 +37,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="container mx-auto py-4 grid grid-cols-2 justify-center items-center gap-4">
+    <div className="container mx-auto p-4 grid grid-cols-2 justify-center items-center gap-4">
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl">Contact Us</h1>
         <p className="text-[var(--gray)]">

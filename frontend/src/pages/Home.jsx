@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <main className="container mx-auto py-4">
+    <main className="container mx-auto p-4">
       <section>
         <div className="grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-4 text-center md:text-left">
           <div className="flex flex-col justify-center items-center md:items-start gap-4">
@@ -18,7 +18,7 @@ const Home = () => {
             </Link>
           </div>
           <div>
-            <img src="/hero.png" alt="Hero Picture" />
+            <img src="/hero.svg" alt="Hero Picture" />
           </div>
         </div>
       </section>

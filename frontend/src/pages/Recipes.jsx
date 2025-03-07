@@ -15,7 +15,7 @@ const Recipes = () => {
   if (isRecipesLoading) return <div>Loading...</div>;
 
   return (
-    <main className="container mx-auto py-4">
+    <main className="container mx-auto p-4">
       {authUser ? (
         <>
           <div className="flex justify-end items-center">
