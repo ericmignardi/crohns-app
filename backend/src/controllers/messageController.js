@@ -10,10 +10,10 @@ export const sendMessage = async (req, res) => {
       return res.status(400).json({ message: "All Fields Required" });
 
     const createdMessage = await sql`
-    INSERT INTO messages (sender_id, receiever_id, message) VALUES (${senderId}, ${receiverId}, ${message} RETURNING *;)`;
+    INSERT INTO messages (sender_id, receiver_id, message) VALUES (${senderId}, ${receiverId}, ${message}) RETURNING *;`;
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage");
+      io.to(receiverSocketId).emit("newMessage", createdMessage[0]);
     }
     console.log("Successfully Created Message");
     res.status(201).json(createdMessage[0]);
@@ -41,7 +41,7 @@ export const getUsers = async (req, res) => {
   const { id: loggedInUser } = req.user;
   try {
     const users = await sql`
-    SELECT * FROM users WHERE id != ${loggedInUser}`;
+    SELECT * FROM users WHERE id != ${loggedInUser};`;
     console.log("Successfully Read Users");
     res.status(200).json(users);
   } catch (error) {

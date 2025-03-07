@@ -10,6 +10,6 @@ const router = Router();
 
 router.post("/:id", protectRoutes, sendMessage);
 router.get("/:id", protectRoutes, getMessages);
-router.get("/users", protectRoutes, getUsers);
+router.get("/users/read", protectRoutes, getUsers);
 
 export default router;
