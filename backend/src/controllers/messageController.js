@@ -1,5 +1,5 @@
 import { sql } from "../lib/db.js";
-import { getReceiverSocketId } from "../lib/socket.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const sendMessage = async (req, res) => {
   const { id: receiverId } = req.params;
@@ -8,7 +8,6 @@ export const sendMessage = async (req, res) => {
   try {
     if (!message || message.trim() === "")
       return res.status(400).json({ message: "All Fields Required" });
-
     const createdMessage = await sql`
     INSERT INTO messages (sender_id, receiver_id, message) VALUES (${senderId}, ${receiverId}, ${message}) RETURNING *;`;
     const receiverSocketId = getReceiverSocketId(receiverId);

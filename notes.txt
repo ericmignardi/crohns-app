@@ -1,0 +1,54 @@
+Socket IO Setup:
+
+1. Setup message routes (getUsers, getMessages(receiverId), createMessage(receiverId))
+2. Setup socket.js file (app, server, io, getReceiverSocketId(userId), onlineUserSocketMap)
+3. Refactor index.js
+4. Call getReceiverSocketId(userId) in messageController file for online status (io.to(receiverSocketId).emit())
+5. Add socket, onlineUsers, connectSocket, & disconnectSocket to useAuthStore file
+    CONNECT:
+        - if (!authUser || get().socket?.connected) return
+        - const socket = io(BASE_URL, query: {
+            userId: authUser.id
+        })
+    - socket.connect()
+    - set({socket: socket})
+    - socket.on("getOnlineUsers", (userIds) => {
+        set({onlineUsers: userIds})
+    })
+    DISCONNECT:
+        - if (get().socket?.connected) get().socket.disconnect()
+6. Create useChatStore file (users, messages, selectedUser, getUsers, getMessages, createMessage, subscribeToMessages, unsubscribeFromMessages, setSelectedUser)
+    SUBSCRIBE:
+        subscribeToMessages: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+        const socket = useAuthStore.getState().socket;
+        socket.on("newMessage", (newMessage) => {
+        const isMessageSentFromSelectedUser =
+            newMessage.senderId === selectedUser.id;
+        if (!isMessageSentFromSelectedUser) return;
+        set({
+            messages: [...get().messages, newMessage],
+        });
+        });
+    }
+    UNSUBSCRIBE: 
+        unsubscribeFromMessages: () => {
+            const socket = useAuthStore.getState().socket;
+            socket.off("newMessage");
+        }
+    SELECTED USER:
+        setSelectedUser: (selectedUser) => set({ selectedUser })
+7. Create ChatSidebar.jsx file to display users
+    const { users, getUsers, isUsersLoading, selectedUser, setSelectedUser } =
+    useChatStore();
+    const { onlineUsers } = useAuthStore();
+    const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+
+    useEffect(() => {
+        getUsers();
+    }, [getUsers]);
+
+    const filteredOnlineUsers = showOnlineOnly
+    ? users.filter((user) => onlineUsers.includes(user.id))
+    : users;

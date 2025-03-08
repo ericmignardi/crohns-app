@@ -51,7 +51,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container mx-auto py-4 flex flex-col justify-center items-center gap-4">
+    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4">
       <h1 className="text-4xl">Register</h1>
       <form
         className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4"
