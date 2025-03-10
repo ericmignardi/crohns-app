@@ -12,16 +12,25 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers]);
 
+  console.log(users);
+  console.log(onlineUsers);
+
   const filteredOnlineUsers = showOnlineOnly
-    ? users.filter((user) => onlineUsers.includes(user.id))
+    ? users.filter((user) => onlineUsers.includes(String(user.id)))
     : users;
 
   if (isUsersLoading) return <div>Loading...</div>;
 
   return (
-    <aside>
+    <aside className="border-red-500 border-2">
       <div className="grid grid-cols-1 justify-center items-center">
         <h1>Users</h1>
+        <button
+          onClick={() => setShowOnlineOnly(!showOnlineOnly)}
+          className="btn"
+        >
+          {showOnlineOnly ? "Show All Users" : "Show Online Users Only"}
+        </button>
         {filteredOnlineUsers.map((user) => {
           return (
             <button
@@ -44,12 +53,12 @@ const Sidebar = () => {
                 </p>
                 <span
                   className={`${
-                    onlineUsers.includes(user.id)
+                    onlineUsers.includes(String(user.id))
                       ? "text-[var(--teal)]"
                       : "text-gray-500"
                   }`}
                 >
-                  {onlineUsers.includes(user.id) ? "Online" : "Offline"}
+                  {onlineUsers.includes(String(user.id)) ? "Online" : "Offline"}
                 </span>
               </div>
             </button>

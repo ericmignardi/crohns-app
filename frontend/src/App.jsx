@@ -15,7 +15,9 @@ import { Routes, Route } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore.js";
 
 const App = () => {
-  const { authUser, verify, isVerifyingAuth } = useAuthStore();
+  const { authUser, verify, isVerifyingAuth, onlineUsers } = useAuthStore();
+
+  console.log(onlineUsers);
 
   useEffect(() => {
     verify();
