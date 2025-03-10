@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore";
 
@@ -24,6 +24,14 @@ const Messages = () => {
     unsubscribeFromMessages,
   ]);
 
+  useEffect(() => {
+    if (messageRef.current && messages) {
+      messageRef.current.scrollIntoView({ behaviour: "smooth" });
+    }
+  }, [messages]);
+
+  const messageRef = useRef(null);
+
   return (
     <div className="border-red-500 border-2">
       {isMessagesLoading ? (
@@ -35,7 +43,11 @@ const Messages = () => {
           const messageAlignment =
             message.sender_id === authUser.id ? "chat-end" : "chat-start";
           return (
-            <div className={`chat ${messageAlignment}`} key={message.id}>
+            <div
+              className={`chat ${messageAlignment}`}
+              key={message.id}
+              ref={messageRef}
+            >
               <p className="chat-bubble">{message.message}</p>
             </div>
           );
