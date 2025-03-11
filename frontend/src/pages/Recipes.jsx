@@ -12,21 +12,21 @@ const Recipes = () => {
     read();
   }, [read]);
 
-  if (isRecipesLoading) return <div>Loading...</div>;
+  // Show loading state until recipes are loaded
+  if (isRecipesLoading) return <div>Loading recipes...</div>;
 
   return (
     <main className="container mx-auto p-4">
-      {authUser ? (
-        <>
-          <div className="flex justify-end items-center">
-            <Link to="/create">
-              <button className="btn bg-[var(--teal)] mb-4 rounded-full">
-                Create
-              </button>
-            </Link>
-          </div>
-        </>
-      ) : null}
+      {authUser && (
+        <div className="flex justify-end items-center">
+          <Link to="/create">
+            <button className="btn bg-[var(--teal)] mb-4 rounded-full">
+              Create
+            </button>
+          </Link>
+        </div>
+      )}
+
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-4">
         {recipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />

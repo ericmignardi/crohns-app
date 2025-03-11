@@ -79,18 +79,21 @@ const RecipeCard = ({ recipe }) => {
         <h2 className="card-title">{recipe.name}</h2>
         <p>{recipe.description}</p>
         <div className="card-actions justify-end">
-          {authUser.id === recipe.user_id && (
-            <button
-              className="btn bg-blue-500 text-[var(--dark)]"
-              onClick={() => setIsModalOpen("update")}
-            >
-              <FaEdit />
-            </button>
-          )}
-          {authUser.id === recipe.user_id && (
-            <button className="btn bg-red-500 text-[var(--dark)]">
-              <FaTrash onClick={handleDelete} />
-            </button>
+          {authUser && authUser.id === recipe.user_id && (
+            <>
+              <button
+                className="btn bg-blue-500 text-[var(--dark)]"
+                onClick={() => setIsModalOpen("update")}
+              >
+                <FaEdit />
+              </button>
+              <button
+                className="btn bg-red-500 text-[var(--dark)]"
+                onClick={handleDelete}
+              >
+                <FaTrash />
+              </button>
+            </>
           )}
           <button
             className="btn bg-[var(--teal)]"
