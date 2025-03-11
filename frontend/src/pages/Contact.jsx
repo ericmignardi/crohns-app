@@ -60,7 +60,7 @@ const Contact = () => {
       <div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4"
+          className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4 bg-base-300"
         >
           <label htmlFor="name">Name</label>
           <input

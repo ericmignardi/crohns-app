@@ -11,6 +11,7 @@ export const useAuthStore = create((set, get) => ({
   isRegistering: false,
   isLogginIn: false,
   isVerifyingAuth: true,
+  isUpdatingProfile: false,
   socket: null,
   onlineUsers: [],
   register: async (formData) => {
@@ -64,6 +65,19 @@ export const useAuthStore = create((set, get) => ({
       toast.error("Unable To Verify Auth");
     } finally {
       set({ isVerifyingAuth: false });
+    }
+  },
+  update: async (formData) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const response = await axiosInstance.put("/auth/update", formData);
+      set({ authUser: response.data });
+      toast.success("Successfully Updated Profile");
+    } catch (error) {
+      console.log("Error in update: ", error.message);
+      toast.error("Unable To Update Profile");
+    } finally {
+      set({ isUpdatingProfile: false });
     }
   },
   connectSocket: () => {

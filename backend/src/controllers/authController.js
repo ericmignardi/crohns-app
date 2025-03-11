@@ -1,6 +1,7 @@
 import { sql } from "../lib/db.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import cloudinary from "../lib/cloudinary.js";
 
 export const register = async (req, res) => {
   const { first_name, last_name, email, username, password } = req.body;
@@ -91,6 +92,30 @@ export const verify = async (req, res) => {
     res.status(200).json(req.user);
   } catch (error) {
     console.log("Error in verify: ", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const update = async (req, res) => {
+  const { id } = req.user;
+  const { profile_pic } = req.body;
+  try {
+    if (!profile_pic)
+      return res.status(400).json({ message: "All Fields Required" });
+    let uploadUrl;
+    try {
+      uploadUrl = await cloudinary.uploader.upload(profile_pic);
+    } catch (cloudinaryError) {
+      return res.status(400).json({ message: "Error Uploading To Cloudinary" });
+    }
+    const users = await sql`
+    UPDATE users SET profile_pic = ${uploadUrl.secure_url} WHERE id = ${id} RETURNING *;`;
+    if (users.length === 0)
+      return res.status(400).json({ message: "Error Updating User" });
+    console.log("User Updated Successfully");
+    res.status(200).json(users[0]);
+  } catch (error) {
+    console.log("Error in update: ", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

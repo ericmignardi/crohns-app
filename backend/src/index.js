@@ -38,7 +38,7 @@ async function initDb() {
     email VARCHAR(50) NOT NULL UNIQUE,
     username VARCHAR(25) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    profile_pic VARCHAR(255),
+    profile_pic TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;
     await sql`
     CREATE TABLE IF NOT EXISTS recipes (
