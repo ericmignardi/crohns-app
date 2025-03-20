@@ -7,8 +7,10 @@ import recipeRoutes from "./routes/recipeRoutes.js";
 import recipeIngredientRoutes from "./routes/recipeIngredientRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import { app, server } from "./lib/socket.js";
+import path from "path";
 
 const PORT = process.env.PORT || 5000;
+const __dirname = path.resolve();
 
 app.use(
   cors({
@@ -27,6 +29,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/recipe-ingredients", recipeIngredientRoutes);
 app.use("/api/messages", messageRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
+}
 
 async function initDb() {
   try {
