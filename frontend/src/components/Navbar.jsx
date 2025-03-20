@@ -19,7 +19,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="mx-auto p-4 fixed top-0 left-0 w-full z-10 bg-transparent">
+    <header className="mx-auto p-4 fixed top-0 left-0 w-full h-full z-10 bg-transparent">
       <nav className="flex justify-between items-center">
         <Link to="/" className="font-[Lora] text-[32px]">
           Wellness

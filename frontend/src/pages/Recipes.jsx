@@ -16,6 +16,9 @@ const Recipes = () => {
 
   return (
     <main className="container mx-auto p-4 flex flex-col justify-center items-center gap-4 min-h-screen">
+      <div>
+        <h1 className="text-4xl">Recipes</h1>
+      </div>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-4">
         {recipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
