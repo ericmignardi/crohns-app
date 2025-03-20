@@ -19,7 +19,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="container mx-auto p-4">
+    <header className="mx-auto p-4 fixed top-0 left-0 w-full z-10 bg-transparent">
       <nav className="flex justify-between items-center">
         <Link to="/" className="font-[Lora] text-[32px]">
           Wellness
@@ -72,8 +72,8 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/register"
-                  className="btn bg-[var(--teal)] rounded-full"
+                  to="/"
+                  className="btn btn-primary text-[var(--light)] rounded-full"
                 >
                   Join Us!
                 </Link>
@@ -84,7 +84,7 @@ const Navbar = () => {
               <li>
                 <Link to="/profile" className="flex items-center">
                   <div className="avatar">
-                    <div className="ring-offset-base-100 w-8 rounded-full ring ring-offset-2 ring-[var(--blue)]">
+                    <div className="ring-offset-base-100 w-8 rounded-full ring ring-offset-2 ring-accent">
                       <img
                         src={
                           authUser.profile_pic ||
@@ -99,7 +99,7 @@ const Navbar = () => {
               </li>
               <li>
                 <button
-                  className="btn bg-[var(--teal)] rounded-full"
+                  className="btn btn-primary text-[var(--light)] rounded-full"
                   onClick={handleLogout}
                 >
                   Logout
@@ -112,7 +112,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-0 left-0 size-full bg-[var(--blue)] opacity-90 shadow-lg z-10 flex justify-center items-center">
+        <div className="md:hidden absolute top-0 left-0 size-full bg-base-300 opacity-90 shadow-lg z-10 flex justify-center items-center">
           <ul className="flex flex-col items-center gap-4">
             <li>
               <Link

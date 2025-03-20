@@ -40,10 +40,10 @@ const Login = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4">
+    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4 min-h-screen">
       <h1 className="text-4xl">Login</h1>
       <form
-        className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4 bg-base-300"
+        className="flex flex-col border-primary border-2 rounded-lg p-4 gap-4 backdrop-blur-md"
         onSubmit={handleSubmit}
       >
         <input
@@ -66,14 +66,14 @@ const Login = () => {
         />
         <button
           type="submit"
-          className="btn rounded-full bg-[var(--teal)]"
+          className="btn rounded-full btn-primary text-[var(--light)]"
           disabled={isLoggingIn}
         >
           {isLoggingIn ? "Logging in..." : "Submit"}
         </button>
         <p className="text-sm text-center">
           Not registered?{" "}
-          <Link to="/register" className="text-[var(--blue)] link link-hover">
+          <Link to="/register" className="text-accent link link-hover">
             Register
           </Link>
         </p>

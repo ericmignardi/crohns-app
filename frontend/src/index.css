@@ -14,8 +14,7 @@
 body {
   font-family: "Merriweather";
   color: var(--light);
-  /* background: var(--dark); */
-  min-height: 100vh;
+  background: url("/bg.jpg") no-repeat center/cover;
 }
 
 h1,

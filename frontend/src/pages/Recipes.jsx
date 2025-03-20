@@ -12,26 +12,24 @@ const Recipes = () => {
     read();
   }, [read]);
 
-  // Show loading state until recipes are loaded
   if (isRecipesLoading) return <div>Loading recipes...</div>;
 
   return (
-    <main className="container mx-auto p-4">
-      {authUser && (
-        <div className="flex justify-end items-center">
-          <Link to="/create">
-            <button className="btn bg-[var(--teal)] mb-4 rounded-full">
-              Create
-            </button>
-          </Link>
-        </div>
-      )}
-
+    <main className="container mx-auto p-4 flex flex-col justify-center items-center gap-4 min-h-screen">
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-4">
         {recipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </section>
+      {authUser && (
+        <div className="flex justify-center items-center">
+          <Link to="/create">
+            <button className="btn btn-primary text-[var(--light)] mb-4 rounded-full">
+              Create
+            </button>
+          </Link>
+        </div>
+      )}
     </main>
   );
 };

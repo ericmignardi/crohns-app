@@ -37,7 +37,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 grid grid-cols-2 justify-center items-center gap-4">
+    <div className="container mx-auto p-4 grid lg:grid-cols-2 justify-center items-center gap-4 min-h-screen">
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl">Contact Us</h1>
         <p className="text-[var(--gray)]">
@@ -45,22 +45,22 @@ const Contact = () => {
           possible.
         </p>
         <p className="flex gap-4 items-center">
-          <FaPhone className="text-[var(--blue)]" />
+          <FaPhone className="text-accent" />
           905-304-1234
         </p>
         <p className="flex gap-4 items-center">
-          <FaMailBulk className="text-[var(--blue)]" />
+          <FaMailBulk className="text-accent" />
           mignardi.e@gmail.com
         </p>
         <p className="flex gap-4 items-center">
-          <FaLocationArrow className="text-[var(--blue)]" />
+          <FaLocationArrow className="text-accent" />
           123 Upper James St. - Hamilton ON.
         </p>
       </div>
       <div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4 bg-base-300"
+          className="flex flex-col border-primary border-2 rounded-lg p-4 gap-4 backdrop-blur-md"
         >
           <label htmlFor="name">Name</label>
           <input
@@ -92,7 +92,10 @@ const Contact = () => {
             value={formData.message}
             onChange={handleChange}
           ></textarea>
-          <button type="submit" className="btn bg-[var(--teal)] rounded-full">
+          <button
+            type="submit"
+            className="btn btn-primary text-[var(--light)] rounded-full"
+          >
             Submit
           </button>
         </form>

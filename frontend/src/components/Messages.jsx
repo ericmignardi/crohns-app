@@ -26,33 +26,39 @@ const Messages = () => {
 
   useEffect(() => {
     if (messageRef.current && messages) {
-      messageRef.current.scrollIntoView({ behaviour: "smooth" });
+      messageRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
   const messageRef = useRef(null);
 
   return (
-    <div className="border-red-500 border-2">
-      {isMessagesLoading ? (
-        <div>Loading...</div>
-      ) : messages.length === 0 ? (
-        <div>No messages...</div>
-      ) : (
-        messages.map((message) => {
-          const messageAlignment =
-            message.sender_id === authUser.id ? "chat-end" : "chat-start";
-          return (
-            <div
-              className={`chat ${messageAlignment}`}
-              key={message.id}
-              ref={messageRef}
-            >
-              <p className="chat-bubble">{message.message}</p>
-            </div>
-          );
-        })
+    <div className="flex flex-col overflow-y-auto p-4 space-y-4 max-h-[70vh]">
+      {isMessagesLoading && (
+        <div className="flex justify-center items-center text-lg text-gray-500">
+          Loading messages...
+        </div>
       )}
+      {messages.length === 0 && !isMessagesLoading && (
+        <div className="flex justify-center items-center text-lg text-gray-500">
+          No messages yet...
+        </div>
+      )}
+      {messages.map((message) => {
+        const messageAlignment =
+          message.sender_id === authUser.id ? "chat-end" : "chat-start";
+        return (
+          <div
+            className={`chat ${messageAlignment} max-w-xs rounded-lg shadow-md`}
+            key={message.id}
+            ref={messageRef}
+          >
+            <p className="chat-bubble bg-base-200 text-base-content p-3 rounded-lg">
+              {message.message}
+            </p>
+          </div>
+        );
+      })}
     </div>
   );
 };

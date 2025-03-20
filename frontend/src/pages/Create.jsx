@@ -89,12 +89,12 @@ const Create = () => {
   };
 
   return (
-    <main className="container mx-auto p-4">
-      <section>
-        <h1>Create</h1>
+    <main className="container mx-auto p-4 flex flex-col justify-center items-center min-h-screen gap-4">
+      <section className="flex flex-col justify-center items-center gap-4">
+        <h1 className="text-4xl">Create</h1>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4"
+          className="flex flex-col border-primary border-2 rounded-lg p-4 gap-4 backdrop-blur-md"
         >
           <label htmlFor="name">Name</label>
           <input
@@ -207,11 +207,14 @@ const Create = () => {
           <button
             type="button"
             onClick={handleAddIngredient}
-            className="btn bg-[var(--blue)] rounded-full"
+            className="btn btn-outline rounded-full"
           >
             Add Ingredient
           </button>
-          <button type="submit" className="btn bg-[var(--teal)] rounded-full">
+          <button
+            type="submit"
+            className="btn btn-primary text-[var(--light)] rounded-full"
+          >
             Submit
           </button>
         </form>

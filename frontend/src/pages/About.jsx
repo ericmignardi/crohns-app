@@ -2,7 +2,7 @@ import React from "react";
 
 const About = () => {
   return (
-    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4">
+    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4 min-h-screen">
       <h1 className="text-4xl">About Us</h1>
       <p className="text-[var(--gray)]">
         Welcome to Wellness, a community-driven platform dedicated to supporting

@@ -4,7 +4,6 @@ import { useAuthStore } from "../store/useAuthStore.js";
 const Profile = () => {
   const { authUser, isUpdatingProfile, update } = useAuthStore();
   const [selectedImage, setSelectedImage] = useState(null);
-  const formRef = useRef(null); // Reference to the form element
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -19,9 +18,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4">
+    <div className="container mx-auto p-4 flex flex-col justify-center items-center gap-4 min-h-screen">
       <h1 className="text-4xl">Profile</h1>
-      <div className="flex flex-col justify-center items-center border-[var(--teal)] border-2 rounded-lg p-4 gap-4 bg-base-300">
+      <div className="flex flex-col justify-center items-center border-primary border-2 rounded-lg p-4 gap-4 backdrop-blur-md">
         <label htmlFor="profile_pic">
           <div className="avatar">
             <div className="w-24 rounded-full ring ring-[var(--light)]">
@@ -46,7 +45,7 @@ const Profile = () => {
             disabled={isUpdatingProfile}
           />
         </label>
-        <p className="text-xs text-[var(--blue)]">
+        <p className="text-xs text-secondary">
           {isUpdatingProfile
             ? "Uploading..."
             : "Click On The Image To Update Profile"}

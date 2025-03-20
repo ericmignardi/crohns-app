@@ -72,23 +72,23 @@ const RecipeCard = ({ recipe }) => {
             recipe.image ||
             "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
           }
-          alt="Shoes"
+          alt={recipe.name + "'s Image"}
         />
       </figure>
-      <div className="card-body bg-[var(--blue)]">
+      <div className="card-body bg-base-300 rounded-b-[1rem]">
         <h2 className="card-title">{recipe.name}</h2>
-        <p>{recipe.description}</p>
+        <p className="text-[var(--gray)]">{recipe.description}</p>
         <div className="card-actions justify-end">
           {authUser && authUser.id === recipe.user_id && (
             <>
               <button
-                className="btn bg-blue-500 text-[var(--dark)]"
+                className="btn btn-outline btn-primary text-[var(--dark)]"
                 onClick={() => setIsModalOpen("update")}
               >
                 <FaEdit />
               </button>
               <button
-                className="btn bg-red-500 text-[var(--dark)]"
+                className="btn btn-outline btn-error text-[var(--dark)]"
                 onClick={handleDelete}
               >
                 <FaTrash />
@@ -96,7 +96,7 @@ const RecipeCard = ({ recipe }) => {
             </>
           )}
           <button
-            className="btn bg-[var(--teal)]"
+            className="btn btn-outline"
             onClick={() => setIsModalOpen("details")}
           >
             Details
@@ -107,40 +107,50 @@ const RecipeCard = ({ recipe }) => {
       {/* Details Modal */}
       {isModalOpen === "details" && (
         <dialog id="my_modal_1" className="modal modal-open">
-          <div className="modal-box">
-            <div className="flex justify-between items-center gap-2">
-              <h3 className="font-bold text-lg">{recipe.name}</h3>
-              <div className="flex gap-2">
-                <div className="badge badge-sm bg-[var(--blue)]">
+          <div className="modal-box max-w-3xl bg-base-300 p-6 rounded-lg shadow-lg">
+            <div className="flex justify-between items-center gap-4 mb-4">
+              <h3 className="font-bold text-2xl text-[var(--light)]">
+                {recipe.name}
+              </h3>
+              <div className="flex gap-3">
+                <div className="badge badge-sm badge-primary">
                   Prep: {recipe.preparation_time}
                 </div>
-                <div className="badge badge-sm bg-[var(--teal)]">
+                <div className="badge badge-sm badge-accent">
                   Cook: {recipe.cooking_time}
                 </div>
               </div>
             </div>
-            <h4>Ingredients</h4>
-            <ul>
-              {recipe.ingredients.map((ingredient) => (
-                <li key={ingredient.id}>
-                  <span className="text-xs text-[var(--gray)]">
+            <div className="mb-4">
+              <h4 className="text-xl font-semibold text-primary mb-2">
+                Ingredients
+              </h4>
+              <ul className="list-disc pl-5">
+                {recipe.ingredients.map((ingredient) => (
+                  <li
+                    key={ingredient.id}
+                    className="text-sm text-[var(--gray)]"
+                  >
                     {ingredient.name} - {ingredient.quantity} {ingredient.unit}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <h4>Steps</h4>
-            <ul>
-              {recipe.instructions.split("\n").map((instruction, index) => (
-                <li key={index}>
-                  <span className="text-xs text-[var(--gray)]">
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xl font-semibold text-accent mb-2">Steps</h4>
+              <ul className="list-decimal pl-5">
+                {recipe.instructions.split("\n").map((instruction, index) => (
+                  <li key={index} className="text-sm text-[var(--gray)]">
                     {instruction}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div className="modal-action">
-              <button className="btn" onClick={() => setIsModalOpen(null)}>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="modal-action mt-6 flex justify-end">
+              <button
+                className="btn btn-primary text-white rounded-full px-6 py-2"
+                onClick={() => setIsModalOpen(null)}
+              >
                 Close
               </button>
             </div>
@@ -151,10 +161,10 @@ const RecipeCard = ({ recipe }) => {
       {/* Update Recipe Modal */}
       {isModalOpen === "update" && (
         <dialog id="my_modal_2" className="modal modal-open">
-          <div className="modal-box bg-base-200">
+          <div className="modal-box bg-base-300">
             <form
               onSubmit={handleUpdate}
-              className="flex flex-col border-[var(--teal)] border-2 rounded-lg p-4 gap-4"
+              className="flex flex-col border-primary border-2 rounded-lg p-4 gap-4"
             >
               <label htmlFor="name">Name</label>
               <input
@@ -257,7 +267,7 @@ const RecipeCard = ({ recipe }) => {
               ))}
               <button
                 type="submit"
-                className="btn bg-[var(--teal)] rounded-full"
+                className="btn btn-primary text-[var(--light)] rounded-full"
               >
                 Submit
               </button>
