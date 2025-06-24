@@ -1,7 +1,3 @@
-# 🥗 crohns-recipes-app
-
-**crohns-recipes-app** is a full-stack web application designed for individuals living with Crohn's disease. Users can discover, create, edit, and delete personalized recipes suited to their dietary needs and engage in real-time discussions with others in the community.
-
 ## 🎯 Project Overview
 
 This application empowers users with Crohn’s to manage their food intake more effectively. Through secure authentication and a real-time chat feature, users can share and discuss recipes, tips, and experiences. It combines powerful real-time communication with intuitive recipe management.
